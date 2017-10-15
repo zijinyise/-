@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Date</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            var now = new Date();
+            console.log(now)   // 2017-10-05T14:48:20.680Z
+
+            console.log(now.getFullYear())      // 2017  年份
+            console.log(now.getMonth())         // 9  月份，范围是0~11，9代表10月
+            console.log(now.getDate())          // 5  表示24号
+            console.log(now.getDay())           // 4  表示星期三
+            console.log(now.getHours())         // 22  25小时制
+            console.log(now.getMinutes())       // 50  分钟
+            console.log(now.getSeconds())       // 58  秒
+            console.log(now.getMilliseconds())  // 344  毫秒
+            console.log(now.getTime())          // 1507215058344  以number形式表示时间戳（chuo）
+
+            // 创建一个指定日期和时间的Date对象：
+            var d = new Date(2017,10,6,10,51,50,555)
+            console.log(d)   // 2017-11-06T02:51:50.555Z
+
+            // 第二种创建一个指定日期和时间的方法是解析一个符合ISO 8601格式的字符串：
+            var d1 = Date.parse('2017-11-06T02:51:50.555Z')
+            console.log(d1)  // 1509936710555
+            // 但返回的不是Date对象，而是一个时间戳，不过有时间戳可以很容易把它转换为一个Date：
+            var d3 = new Date(1509936710555)
+            console.log(d3)  // 2017-11-06T02:51:50.555Z
+
+            // Date对象表示的时间总是按浏览器所在时区显示的，不过我们即可以显示本地时间，也可以显示调整后的UTC时间：
+            var d4 = new Date(1507258663055)
+            console.log(d4.toLocaleString())   // 2017-10-6 10:57:43 ，本地时间(北京时间)，显示的字符串与操作系统设定的格式有关
+            console.log(d4.toUTCString())    // Fri, 06 Oct 2017 02:57:43 GMT ,UTC时间，与本地时间相差8个小时
+
+            
+            var today = new Date(2017,1,14,2,30,30,555)
+            console.log(today)
+            if(today.getMonth() === 2 && today.getDate() === 14)
+            {
+                console.log('通过')
+            }
+            else
+            {
+                console.log('渣渣')
+            }
+        </script>
+    </body>
+</html>

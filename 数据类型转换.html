@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>数据类型转换</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            // 把数组[1,2,3,4,5]变成整数12345
+            // var arr = [1,2,3,4,5]
+            // var d = arr.reduce(function(x,y)
+            // {
+            //     return x * 10 + y;
+            // })
+            // console.log(d)
+
+
+            // 不要使用JavaScript内置的parseInt()函数，利用map和reduce操作实现一个string2int()函数
+            // function string2int(s)
+            // {
+            //     var arr = s.split('')
+            //     arr = arr.map(function(sum)
+            //     {
+            //         return sum - 0
+            //     })
+            //     var a = arr.reduce(function(x,y)
+            //     {
+            //         return x * 10 + y
+            //     })
+            //     return a
+            // }
+            // if(string2int('0') === 0 && string2int('12345') === 12345 && string2int('12300') === 12300)
+            // {
+            //     if(string2int.toString().indexOf('parseInt') !== -1)
+            //     {
+            //         console.log('不能使用parseInt()!')
+            //     }
+            //     else if(string2int.toString().indexOf('Number') !== -1)
+            //     {
+            //         console.log('不能使用Number')
+            //     }
+            //     else
+            //     {
+            //         console.log('通过')
+            //     }
+            // }
+            // else
+            // {
+            //     console.log('失败')
+            // }
+
+
+            // 大小写转换
+            // 把用户输入的不规范的英文名字，变为首字母大写，其他小写的规范名字。
+            // 输入：['adam', 'LISA', 'barT']，输出：['Adam', 'Lisa', 'Bart']。
+            // function normlize(arr)
+            // {
+            //     arr = arr.map(function(name)
+            //     {
+            //         return name[0].toUpperCase() + name.substring(1).toLowerCase()
+            //     })
+            //     return arr
+            // }
+            // if(normlize(['adam','LIST','barT']).toString() === ['Adam','List','Bart'].toString())
+            // {
+            //     console.log('通过')
+            // }
+            // else
+            // {
+            //     console.log('失败')
+            // }
+
+
+            // 利用map()把字符串变成整数
+            var arr = ['1','2','3'];
+            var r;
+            r = arr.map(str => parseInt(str,10));
+            console.log('[' + r[0] + ',' + r[1] + ',' + r[2] + ']')
+
+            // 或：parseInt被隐藏着的进制参数所害,改为:
+            r = arr.map(function(a)
+            {
+                return parseInt(a,10)
+            })
+            console.log(r)
+
+            // 或者简单一点
+            // 由于map()接受的回掉函数可以有3个参数：callback(currentValue,index,array),
+            // 通常我们仅需要第一个参数，而忽略了传入的后面两个参数。
+            // 不幸的是，parseInt(string,index)没有忽略第二个参数，导致实际执行的函数分别是：
+            //     parseint('0',0);  0,按十进制转换
+            //     parseint('1',1);  NaN,没有一进制进制
+            //     parseint('2',2);  NaN,按二进制转换不允许出现2
+            // 可以改为一下r = arr.map(Number),因为Number(value)函数仅接受一个参数
+            r = arr.map(Number)
+            console.log(r)
+            // alert(r)
+            // 关于上面的另一个解析：
+            // 1、parseInt( )带着两个参数：parseInt(string,radix); 后面的radix指的是使用的是什么进制来进行转换。
+            // 2、关于radix的值：
+            // （1）如果radix省略或者为0，表示按默认进制，也就是十进制转换。
+            // （2）radix值应该是2~36之间的整数，如果超出这个范围，将返回NaN。
+            // 3、例子中的  r = arr.map(parseInt); 
+            // 其实相当于：[ parseInt("1",0) , parseInt("2",1) , parseInt("3",2) ]
+            // 4、结果分析为：
+            // （1）第一个元素，相当于省略了radix值，按照十进制转换字符串"1"，结果为1。
+            // （2）第二个元素，它的radix值为1，不在2~36之间，所以结果返回NaN。（也就是说没有一进制这个进制）。
+            // （3）第三个元素，radix值为2，所以按照二进制进行转换，而字符串"3"中，没有合法的二进制数，所以返回结果NaN。
+            // （4）因此最后的结果是[1,NaN,NaN]。
+        </script>
+    </body>
+</html>

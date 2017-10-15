@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>方法</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            // 写法一：
+            // var xiaoming = 
+            // {
+            //     name:'小明',
+            //     birth: 1990,
+            //     age:function()
+            //     {
+            //         var y = new Date().getFullYear()
+            //         return y - this.birth
+            //     }
+            // };
+            // console.log(xiaoming.age)  //显示 function age()
+            // console.log(xiaoming.age())  //27
+
+            // 写法二：
+            // function getAge()
+            // {
+            //     var y = new Date().getFullYear();
+            //     return y - this.birth;
+            // }
+            // var xiaoming = 
+            // {
+            //     name:'小明',
+            //     birth:1990,
+            //     age:getAge
+            // };
+            // console.log(xiaoming.age())   //27
+            // console.log(xiaoming.getAge)  //undefined
+
+            // 方法三：
+            var xiaoming = 
+            {
+                name:'小明',
+                birth:1990,
+                age:function()
+                {
+                    var than = this;  //在方法内部一开始就获取this
+                    function getAgeFromBirth()
+                    {
+                        var y = new Date().getFullYear();
+                        return y - than.birth;   //用than代替this
+                    }
+                    return getAgeFromBirth()
+                }
+            }
+            console.log(xiaoming.age())  //27
+        </script>
+    </body>
+</html>

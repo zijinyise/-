@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>map/reduce</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            // 由于map()方法定义在JavaScript的Array中，
+            // 我们调用Array的map()方法，传入我们自己的函数，就得到了一个新的Array作为结果
+            function app(x)
+            {
+                return x * x
+            }
+            var arr = [1,2,3,4,5,6,7,8,9]
+            console.log(arr.map(app))     // [1, 4, 9, 16, 25, 36, 49, 64, 81]
+            // 把arr数组转换成字符串
+            console.log(arr.map(String))  // [ "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+
+            // 循环写法
+            var f = function(b)
+            {
+                return b * b
+            }
+            var app = [1,2,3,4,5,6,7,8,9]
+            var result = []
+            for(var i = 0; i < app.length; i++)
+            {
+                result.push(f(app[i]))
+                console.log(result.push(f(app[i])))
+            }
+        </script>
+    </body>
+</html>

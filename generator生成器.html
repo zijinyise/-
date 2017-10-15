@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>generator生成器</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            // 斐波那契数列,
+            // function fib(max)
+            // {
+            //     var t,a = 0,b = 1,arr = [0,1];
+            //     while(arr.length < max)
+            //     {
+            //         t = a + b;
+            //         a = b;
+            //         b = t;
+            //         arr.push(t);
+            //     }
+            //     return arr;
+            // }
+            // // 第三个数是前两个的和, 比如0，1.1   1，2，3
+            // console.log(fib(5));    // Array [ 0, 1, 1, 2, 3 ]
+            // console.log(fib(10));   // Array [ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 ]
+
+
+            // function* fib(max)
+            // {
+            //     var t,a = 0,b = 1,n = 1;
+            //     while(n < max)
+            //     {
+            //         yield a;
+            //         t = a + b;
+            //         a = b;
+            //         b = t;
+            //         n ++
+            //     }
+            //     return a;
+            // }
+            // console.log(fib(5));   // Generator {  }
+
+            // // 直接调用一个generator和调用函数不一样，fib(5)仅仅是创建了一个generator对象，还没去执行它
+            // // 调用generator对象有两个方法：一是不断地调用generator对象的next()方法
+            // var f = fib(5)   //定义数字为几就console多少个，不然会endefined
+            // console.log(f.next())  // Object { value: 0, done: false }
+            // console.log(f.next())  // Object { value: 1, done: false }
+            // console.log(f.next())  // Object { value: 1, done: false }
+            // console.log(f.next())  // Object { value: 2, done: false }
+            // console.log(f.next())  // Object { value: 3, done: true }
+            // // console.log(f.next())  // Object { value: undefined, done: true }
+            // // console.log(f.next())  // Object { value: undefined, done: true }
+            // // next()方法会执行generator的代码，然后，每次遇到yield x;
+            // // 就返回一个对象{value: x,done: true/false},然后‘暂停’。返回的value就是yield的返回值，
+            // // done表示这个generator是否已经执行结束了。如果done为true，则value就是return的返回值
+            // // 当执行到done为true时，这个generator对象就已经全部执行完毕，不要再继续调用next()了。
+
+
+            // // 第二个方法是直接调用for...of循环迭代generator对象，这种方式不需要我们自己判断done：
+            // for(var x of fib(5))
+            // {
+            //     console.log(x)   // 输出 0 1 1 2
+            //     // 没输出3............
+            // }
+
+
+            // generator和普通函数相比，有什么用？
+            // 因为generator可以在执行过程中多次返回，所以它看省区就像一个可以执行状态的函数，
+            // 利用这一点，写一个generator就可以实现需要用面向对象才能实现的功能。
+            // 例如：用一个对象来保存状态，要这么写：
+            // var fib = 
+            // {
+            //     a: 0,
+            //     b: 1,
+            //     n: 0,
+            //     max: 5,
+            //     next: function()
+            //     {
+            //         var r = this.a,
+            //             t = this.a + this.b;
+            //         this.a = this.b;
+            //         this.b = t;
+            //         if(this.n < this.max)
+            //         {
+            //             this.n ++;
+            //             return r;
+            //         }
+            //         else
+            //         {
+            //             return undefined;
+            //         }
+            //     }
+            // };
+
+
+            function* next_id()
+            {
+                // 一：
+                // var current_id = 1;
+                // while(true)
+                // {
+                //     yield current_id;
+                //     current_id ++;
+                // }
+
+                // 二：
+                // var a = 0;
+                // while(1) yield ++a;
+
+                // 三：
+                // for(var i = 1; i < 100; i++) yield i
+
+                // 四：
+                // let i = 1;
+                // yield i;
+                // while(++i < 100)
+                // {
+                //     yield i
+                // }
+                // return i
+
+                // 五：
+                // var current_id = 1;
+                // while(1) yield current_id++
+
+                // 六：
+                var current_id = 1;
+                while(current_id > -1)
+                {
+                    yield current_id;
+                    current_id ++;
+                }
+            }
+            var x,pass = true,g = next_id();
+            for(x = 1; x < 100; x ++)
+            {
+                if(g.next().value !== x)
+                {
+                    pass = false;
+                    console.log('失败')
+                    break;
+                }
+            }
+            if(pass)
+            {
+                console.log('通过')
+            }
+        </script>
+    </body>
+</html>

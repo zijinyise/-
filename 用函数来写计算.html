@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>用函数来写计算</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <pre>
+            首先说明，要打印多少次就是要执行这个f函数多少次
+            var zero = function (f) {
+                return function (x) {
+                    return x;
+                }
+            };
+            执行(zero(function(){console.log('0');}))()
+            执行了最外面的function(f)，传入的参数是function(){console.log('0');，
+            返回了function(x),因为用了一个“创建一个匿名函数并立刻执行”的语法：，
+
+
+            (
+                这里根本不需要立刻执行那个匿名函数.
+                one(function () { console.log('print 1 times'); })() 
+                是将负责打印的匿名函数作为实参传给one的形参f, 
+                返回一个闭包. 再用()调用该闭包函数. 由于没有向闭包传参数, 所以其形参x将是undefined
+
+                如果把()理解为立刻执行匿名函数, 那你要调用闭包函数就少一个()了
+            )
+
+
+
+            所以function(x)执行，x是空，返回x。(这里跟f毫无关系)
+            var one = function (f) {
+                return function (x) {
+                    return f(x);
+                }
+            };
+
+
+            (one(function(){console.log('1');}))()  ,
+            这里返回的是f(x),f是什么上面已经说了，x就是空，所以打印一次
+
+            要打印两次可以这么做
+            var two=function(f){
+                return function(x){
+                f(f(x));}
+            }
+            three可以这么写
+            var two=function(f){
+                return function(x){
+                f(f(f(x)));}
+            }
+            f无论接受什么参数都会执行console.log()
+            所以无论是zero，one，two，three，four，five都是两层函数嵌套，
+            只需要执行两次，最后的返回就是要打印多少次，就执行f多少次，所以add可以这么写
+            function add(n,m){
+                return function(f){
+                    return function(x){
+                        return m(f)(n(f)(x));}
+                }
+            }
+            n,m参数会可以被嵌套在add函数里的任意函数调用，就好像是子函数继承父函数的参数一样，
+            f还是上面的f，将最后的return分解开来看，先是n(f)(x),n就是one，two，three。。。。中的一个,
+            假如是add(one,two),n就是one，上面说了（zero，one，two，three，four，five。。。,
+            都是两层函数嵌套，只需要执行两次，最后的返回就是要打印多少次，
+            就执行f多少次），所以这里n是多少就打印多少次，
+            然后m(f)(n(f)(x))将n(f)(x)看成一个整体即一个参数，同理，打印m次，所以加起来打印n+m次
+        </pre>
+        <script>
+            // 定义数字0
+            var zero = function(f)
+            {
+                return function(x)
+                {
+                    return x;
+                }
+            };
+            // 定义数字1
+            var one = function(f)
+            {
+                return function(x)
+                {
+                    return f(x);
+                }
+            };
+            // 定义加法
+            function add(n,m)
+            {
+                return function(f)
+                {
+                    return function(x)
+                    {
+                        return m(f)(n(f)(x));
+                    }
+                }
+            };
+            // 定义减法
+            function subtract(n,m)
+            {
+                return function(f)
+                {
+                    return function(x)
+                    {
+                        return n(x)(m(f)(x));
+                    }
+                }
+            };
+            // 定义乘法
+            function multiply(n,m)
+            {
+                return function(f)
+                {
+                    return function(x)
+                    {
+                        return n(m(f))(x);
+                    }
+                }
+            };
+            function divide(n,m)
+            {
+                return function(f)
+                {
+                    return function(x)
+                    {
+                        return m(n(f))(x)
+                    }
+                }
+            };
+            // 计算数字2 = 1 + 1
+            var two = add(one,one);
+            // 计算数字3 = 1 + 2
+            var three = add(one,two);
+            // 计算数字5 = 2 + 3
+            var five = add(two,three);
+            // 计算数字9 = 3 * 3
+            var nine = multiply(three,three);
+            // 计算数字2 = 5 - 3
+            var mm = subtract(five,two);
+            // 计算数字1 = 3 / 3
+            var aa = divide(three,three);
+
+            // 加
+            (three(function()
+            {
+                console.log('print 3 times');
+            }))();
+
+            // 加
+            (five(function()
+            {
+                console.log('print 5 times');
+            }))();
+
+            // 乘   输出 9 次
+            (nine(function()
+            {
+                console.log('print 9 times');
+            }))();
+
+            // 减  输出2
+            (mm(function()
+            {
+                console.log('print 2 times');
+            }))();
+
+            // 除 输出 1
+            (aa(function()
+            {
+                console.log('print 1 times');
+            }))()
+        </script>
+    </body>
+</html>
