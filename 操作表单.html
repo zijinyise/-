@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>操作表单</title>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <label><input type="radio" name="weekday" id="monday" value="1">monday</input></label>
+        <label><input type="radio" name="weekday" id="tuesday" value="2">tuesday</input></label>
+        <script>
+            var mon = document.getElementById('monday');
+            var tue = document.getElementById('tuesday');
+            console.log(mon.value);  // 1
+            console.log(tue.value);  // 2
+            console.log(mon.checked);  // 选中就是true，没选就是false
+            console.log(tue.checked);  // 选中就是true，没选就是false
+        </script>
+
+
+        <input type="text" id="email">
+        <script>
+            var input = document.getElementById('email');
+            input.value = '@163.com'
+        </script>
+
+        <input type="date" value="2017/11/21">
+        <input type="datetime-local" value="2015-07-01T02:03">
+        <input type="color" value="#ff0000">
+
+
+
+                                  <!--练习：-->
+
+        <!--利用JavaScript检查用户注册信息是否正确，在以下情况不满足时报错并阻止提交表单：
+            1、用户名必须是3-10位英文字母或数字；
+            2、口令必须是6-20位；
+            3、两次输入口令必须一致。-->
+        <form id="test-register" action="#" target="_blank" onsubmit="return checkRegisterForm()">
+             <p id="test-error" style="color:red"></p> 
+            <p>
+                用户名: <input type="text" id="username" name="username">
+            </p>
+            <p>
+                口令: <input type="password" id="password" name="password">
+            </p>
+            <p>
+                重复口令: <input type="password" id="password-2">
+            </p>
+            <p>
+                <button type="submit">提交</button> <button type="reset">重置</button>
+            </p>
+        </form>
+        <script>
+            // 一：
+            // var checkRegisterForm = function ()
+            // {
+            //     var a = document.getElementById('username').value;
+            //     var b = document.getElementById('password').value;
+            //     var c = document.getElementById('password-2').value;
+            //     var d = /^[0-9a-zA-Z]{3,10}$/;
+            //     var e = /^.{6,20}/;
+            //     if(!d.test(a))
+            //     {
+            //         alert('用户名必须是3-10位英文字母或数字');
+            //         return false;
+            //     }
+            //     else if(!e.test(b))
+            //     {
+            //         alert('口令必须是6-20位');
+            //         return false;
+            //     }
+            //     else if(b != c)
+            //     {
+            //         alert('两次输入口令必须一致');
+            //         return false;
+            //     }
+            //     else
+            //     {
+            //     return true;
+            //     }
+            // }
+
+            // 二：
+            var checkRegisterForm = function()
+            {
+                var user = document.getElementById('username');
+                var pass = document.getElementById('password');
+                var pass2 = document.getElementById('password-2');
+                var rz1 = /^[0-9a-zA-Z]{3,10}$/;
+                var rz2 = /^.{6,20}$/;
+                if(!rz1.test(user.value))
+                {
+                    alert('用户名必须是3-10位英文字母或数字');
+                    return false;
+                }
+                else if(!rz2.test(pass.value))
+                {
+                    alert('口令必须是6-20位');
+                    return false;
+                }
+                else if(pass.value != pass2.value)
+                {
+                    alert('两次输入口令必须一致');
+                    return false;
+                }
+                return true;
+            }
+        </script>
+    </body>
+</html>

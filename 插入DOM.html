@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>插入DOM</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <!--当我们获得了某个DOM节点，想在这个DOM节点内插入新的DOM，应该如何做
+        如果这个DOM节点是空的，例如，<div></div>，那么，
+        直接使用innerHTML = '<span>child</span>'就可以修改DOM节点的内容，相当于“插入”了新的DOM节点
+
+        如果这个DOM节点不是空的，那就不能这么做，因为innerHTML会直接替换掉原来的所有子节点
+        有两个办法可以插入新的节点。一个是使用appendChild，把一个子节点添加到父节点的最后一个子节点:-->
+        <p id="js">JavaScript</p>
+        <div id="list">
+            <p id="java">Java</p>
+            <p id="html">HTML</p>
+            <p id="css">CSS</p>
+        </div>
+        <!--把<p id="js">JavaScript</p>添加到<div id="list">的最后一项-->
+        <!--<script>
+            var js = document.getElementById('js');
+            var list = document.getElementById('list');
+            list.appendChild(js)
+        </script>-->
+        <!--现在，HTML结构变成了这样：-->
+        <!--<div id="list">
+            <p id="java">Java</p>
+            <p id="html">HTML</p>
+            <p id="css">CSS</p>
+            <p id="js">JavaScript</p>
+        </div>-->
+
+        <!--因为我们插入的js节点已经存在于当前的文档树，因此这个节点首先会从原先的位置删除，再插入到新的位置-->
+        <!--更多的时候我们会从零创建一个新的节点，然后插入到指定位置：-->
+        <!--<script>
+            var list = document.getElementById('list');
+            var haskell = document.createElement('p');
+            haskell.id = 'haskell';
+            haskell.innerText = 'Haskell';
+            list.appendChild(haskell);
+        </script>-->
+        <!--这样就动态添加了一个新的节点-->
+        <!--<div id="list">
+            <p id="java">Java</p>
+            <p id="html">HTML</p>
+            <p id="css">CSS</p>
+            <p id="haskell">Haskell</p>
+        </div>-->
+
+
+        <!--动态创建一个节点然后添加到DOM树中，可以实现很多功能
+        下面的代码动态创建了一个<style>节点，然后把它添加到<head>节点的末尾，
+        这样就动态地给文档添加了新的CSS定义：-->
+        <script>
+            var d = document.createElement('style');  // 创建节点
+            d.setAttribute('type','text/css');  // 设置属性
+            d.innerHTML = 'p{color:red}';
+            document.getElementsByTagName('head')[0].appendChild(d);
+        </script>
+
+        
+        <!--insertBefore-->
+        <!--如果我们要把子节点插入到指定的位置怎么办
+        可以使用parentElement.insertBefore(newElement, referenceElement);
+        子节点会插入到referenceElement之前-->
+        <!--还是以上面的HTML为例，假定我们要把Haskell插入到Python之前：-->
+        <!--<div id="list">
+            <p id="java">Java</p>
+            <p id="html">HTML</p>
+            <p id="css">CSS</p>
+        </div>-->
+        <!--可以这么写-->
+        <!--<script>
+            var list = document.getElementById('list');
+            var ref = document.getElementById('html');
+            var haskell = document.createElement('p');
+            haskell.id = 'haskell';
+            haskell.innerText = 'Haskell';
+            list.insertBefore(haskell,ref);
+        </script>-->
+        <!--新的结构图：-->
+        <!--<div id="list">
+            <p id="java">Java</p>
+            <p id="haskell">Haskell</p>
+            <p id="html">HTML</p>
+            <p id="css">CSS</p>
+        </div>-->
+
+        <!--可见，使用insertBefore重点是要拿到一个“参考子节点”的引用
+        很多时候，需要循环一个父节点的所有子节点，可以通过迭代children属性实现：-->
+        <script>
+            var i,c;
+            var list = document.getElementById('list');
+            for(i = 0; i < list.children.length; i++)
+            {
+                c = list.children[i];  // 拿到第i个子节点
+            }
+        </script>
+
+
+
+
+        <!--对一个已有的HTML结构-->
+        <!-- HTML结构 -->
+        <ol id="test-list">
+            <li class="lang">Scheme</li>
+            <li class="lang">JavaScript</li>
+            <li class="lang">Python</li>
+            <li class="lang">Ruby</li>
+            <li class="lang">Haskell</li>
+        </ol>
+        <!--按字符串重新排序DOM节点-->
+        <script>
+            // 一：
+            var arr = [];
+            var list = document.getElementById('test-list');
+            for(var i = 0; i < list.children.length; i++)
+            {
+                arr.push(list.children[i].innerText);
+            }
+            arr.sort();
+            for(var i = 0; i < list.children.length; i++)
+            {
+                list.children[i].innerHTML = arr[i]
+            }
+
+            // 二：
+            // var list = document.getElementById('test-list')；
+            // var slist = list.children;
+            // slist = Array.prototype.slice.call(slist).sort(function(a, b)
+            // {
+            //     return a.innerHTML > b.innerHTML ? 1 : -1 ;
+            // })
+            // slist.forEach(function(el)
+            // {
+            //     list.appendChild(el);
+            // })
+
+            // 测试：
+            (function()
+            {
+                var arr, i,
+                    t = document.getElementById('test-list');
+                if(t && t.children && t.children.length === 5)
+                {
+                    arr = [];
+                    for(i=0; i<t.children.length; i++)
+                    {
+                        arr.push(t.children[i].innerText);
+                    }
+                    if(arr.toString() === ['Haskell', 'JavaScript', 'Python', 'Ruby', 'Scheme'].toString())
+                    {
+                        alert('测试通过!');
+                    }
+                    else
+                    {
+                        alert('测试失败: ' + arr.toString());
+                    }
+                }
+                else
+                {
+                    alert('测试失败!');
+                }
+            })();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>浏览器对象</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            // window对象：
+            // 窗口大小：
+            console.log('window inner size: ' + window.innerHeight + 'x' + window.innerWidth);
+            // 浏览器大小：
+            console.log('window inner size: ' + window.outerHeight + 'x' + window.innerWidth);
+
+
+            // navigator：对象表示浏览器信息，最常用的属性包括：
+                // navigator.appName: 浏览器名称
+                // navigator.appVersion: 浏览器版本
+                // navigator.language: 浏览器设置的语言
+                // navigator.platform: 操作系统类型
+                // navigator.userAgent: 浏览器设定的User-Agent字符
+            console.log(navigator.appName);
+            console.log(navigator.appVersion);
+            console.log(navigator.language);
+            console.log(navigator.platform);
+            console.log(navigator.userAgent);
+            // 注意：navigator的信息可以很容易被用户修改i，所以JavaScript读取的值不一定是正确的
+
+
+
+            // screen：对象表示屏幕的信息，常用的属性有
+                // screen.width: 屏幕宽度，以像素为单位
+                // screen.height: 品目高度，以像素为单位
+                // screen.colorDepth: 返回颜色位数，如 8、16、32
+            console.log('Screen size= ' + screen.width + 'x' + screen.height);
+
+
+
+            // location: 对象表示当前页面的URL信息，例如李哥完整的URL
+            // http://www.baidu.com:8080/path/index.html?a=1&b=2#TOP
+            // 可以用location.href获取：
+            // location.protocol;  // 'http'
+            // location.host;  // 'www.baidy.com'
+            // location.port;  // 8080
+            // location.pathname;  // '/path/index.html'
+            // location.search;  // '?a=1&b=2'
+            // location.hash;  // 'TOP'
+
+
+            // 要加载一个新页面，可以调用location.assign()，如果要重新加载当前页面，调用location.reload()方法：
+            function aa()
+            {
+                if(confirm('重新加载当前页面' + location.href + '?'))
+                {
+                    location.reload();
+                }
+                else
+                {
+                    location.assign('http://www.baidu.com');
+                }
+            }
+            document.body.innerHTML = '<button onclick="aa()">刷新当前页面</button>'
+
+
+
+            // document: 对象表示当前页面
+            // document的title属性是从HTML文档中的<title>xxx<title>读取的，但是可以动态改变
+            document.title = '哈哈哈哈';
+        </script>
+            <dl id="drink-menu" style="border:solid 1px red;padding:6px;">
+                <dt>摩卡</dt>
+                <dd>热摩卡咖啡</dd>
+                <dt>酸奶</dt>
+                <dd>老北京酸奶</dd>
+                <dt>果汁</dt>
+                <dd>鲜榨苹果汁</dd>
+            </dl>
+        <script>
+            // 要查找DOM树的某个节点，需要从document对象开始查找，最常用的查找是根据ID和Tag Name
+            // 用document对象提供的getElementById()和getElementByTagName()可以按ID获得一个DOM节点和按Tag名称获得一组DOM节点：
+            var menu = document.getElementById('drink-menu');
+            var drinks = document.getElementsByTagName('dt');
+            var i,s,menu,drinks;
+            menu = document.getElementById('drink-menu');
+            menu.tagName;  // DL
+
+            drinks = document.getElementsByTagName('dt');
+            s = '提供的饮料有：';
+            for(i = 0; i < drinks.length; i++)
+            {
+                s = s + drinks[i].innerHTML + ',';
+            }
+            alert(s)
+        </script>
+        <script>
+            console.log(document.cookie)
+        </script>
+    </body>
+</html>

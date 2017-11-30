@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>class继承</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            // 用函数实现Student的方法：
+            function Student(name)
+            {
+                this.name = name;
+            }
+            Student.prototype.hello = function()
+            {
+                console.log('Hello, ' + this.name + '!');
+            }
+
+            // 用新的clas关键字来编写Student：
+            class Student1
+            {
+                constructor(name)
+                {
+                    this.name = name;
+                }
+                hello()
+                {
+                    console.log('Hello, ' + this.name + '!');
+                }
+            }
+            // 比较一下可以发现，class的定义包含了构造函数constructor和定义在原型对象上的函数hello()(注意，没有function关键字),
+            // 这样就避免了Student.prototype.hello = function(){...}这样分散的代码
+
+            // 最后，创建一个Student对象代码：
+            var xiaoming = new Student('小明');
+            console.log(xiaoming.hello());
+
+
+            // class继承：
+            class PrimaryStudent extends Student
+            {
+                constructor(name,grade)
+                {
+                    super(name);  // 用super调用父类的构造方法
+                    this.grade = grade;
+                }
+                myGrade()
+                {
+                    console.log('I am at grade' + this.grade);
+                }
+            }
+
+
+
+
+            // 利用class重新定义Cat，并让它从已有的Animal继承，然后增加一个方法say()，返回字符'Hello, ' xxx!
+            class Animal
+            {
+                constructor(name)
+                {
+                    this.name = name;
+                }
+            }
+            class Cat extends Animal
+            {
+                constructor(name)
+                {
+                    super(name);
+                }
+                say()
+                {
+                    return 'Hello, ' +  this.name + '!';
+                }
+            }
+            var kitty = new Cat('Kitty');
+            var doraemon = new Cat('哆啦A梦');
+            if((new Cat('x') instanceof Animal) && kitty && kitty.name === 'Kitty' && kitty.say && typeof kitty.say === 'function' && kitty.say() === 'Hello, Kitty!' && kitty.say === doraemon.say) {
+                alert('测试通过!');
+            }
+            else
+            {
+                alert('测试失败!');
+            }
+        </script>
+    </body>
+</html>

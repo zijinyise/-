@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>操作文件</title>
+        <style>
+            #file-image
+            {
+                width: 300px;
+                height: 300px;
+                border: solid 1px red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="file-info"></div>
+        <div id="file-image"></div>
+        <form>
+            <input type="file" id="file1">
+        </form>
+        <script>
+            window.onload = function()
+            {
+                var finput = document.getElementById('file1');
+                var fileinfo = document.getElementById('file-info');
+                var fileimg = document.getElementById('file-image');
+                finput.addEventListener('change',function()
+                {
+                    console.log('change');
+                    fileimg.style.backgroundImage = '';
+                    if(!finput.value)
+                    {
+                        fileinfo.innerHTML = '没有选择文件';
+                        return;
+                    }
+                    var file = finput.files[0];
+                    fileinfo.innerHTML = '文件:' + file.name + '<br>' +
+                                         '大小:' + file.size + '<br>' +
+                                         '修改:' + file.lastModified;
+                    if(file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif')
+                    {
+                        alert('不是有效的图片文件');
+                        return;
+                    }
+                    var reader = new FileReader();
+                    reader.onload = function(e)
+                    {
+                        console.log('reader.onload');
+                        var data = e.target.result;
+                        fileimg.style.backgroundImage = 'url(' + data + ')'
+                    }
+                    reader.readAsDataURL(file);
+                })
+            }
+        </script>
+    </body>
+</html>

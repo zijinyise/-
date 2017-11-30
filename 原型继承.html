@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>原型继承</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            function Student(props)
+            {
+                this.name = props.name || 'Unnamed';
+            }
+            Student.prototype.hello = function()
+            {
+                console.log('Hello, ' + this.name + '!');
+            }
+            // 现在，我们要基于Student扩展出PrimaryStudent，可以先定义出PrimaryStudent：
+            function PrimaryStudent(props)
+            {
+                // PrimaryStudent构造函数
+                Student.call(this, props);
+                this.grade = props.grade || 1;
+            }
+            // 但是调用了Student构造函数不等于继承了Student，PrimaryStudent创建的对象的原型是：
+            // new PrimaryStudent() ---> PrimaryStudent.prototype ---> Object.prototype ---> null
+            // 这样，原型链对了，继承关系就对了，新的基于PrimaryStudent创建的对象不但能调用PrimaryStudent.prototype定义的方法，
+            // 也可以调用Student.prototype定义的方法
+            // 如果想最简单粗暴的方法这么干：
+            // PrimaryStudent.prototype = Student.prototype;
+            // 是不行的，如果这样的话，PrimaryStudent和Student共享一个原型对象，那还要定义PrimaryStudent干嘛
+            // 必须借助一个中间对象来实现正确的原型链，这个中间对象的原型要指向Student.prototype，
+            // 为了实现这一点，中间对象昂可以用一个空函数f来实现
+
+            // 空函数
+            function F(){};
+            // 把F的原型指向Student.prototype
+            F.prototype = Student.prototype;
+            // 把PrimaryStudent的原型指向一个新的F对象，F对象的原型正好指向Student.prototype
+            PrimaryStudent.prototype = new F();
+            // 把PrimaryStudent原型的构造函数修复为PrimaryStudent
+            PrimaryStudent.prototype.constructor = PrimaryStudent;
+            // 继续在PrimaryStudent原型（就是F()对象）上定义方法
+            PrimaryStudent.prototype.getGrade = function()
+            {
+                return this.grade;
+            }
+            // 创建xiaoming
+            var xiaoming = new PrimaryStudent(
+                {
+                    name:'小明',
+                    grade:2
+                }
+            );
+            console.log(xiaoming.name);  // 小明
+            console.log(xiaoming.grade);  // 2
+
+            // 验证原型
+            console.log(xiaoming.__proto__ === PrimaryStudent.prototype);  // true
+            console.log(xiaoming.__proto__.__proto__ === Student.prototype);  // true
+
+            // 验证继承关系
+            console.log(xiaoming instanceof PrimaryStudent);  // true
+            console.log(xiaoming instanceof Student);  // true
+            // 注意：函数F仅用于桥接，创建了一个new F()实例，而且，没有改变原有的Student定义的原型链，
+            // 如果把继承这个动作用于一个inherits()函数封装起来，还可以隐藏F的定义，并简化代码
+            function inherits(Child,Parent)
+            {
+                var F = function(){};
+                F.prototype = Parent.prototype;
+                Child.prototype = new F();
+                Child.prototype.constructor = Child;
+            }
+            // 这个inherits()函数可以复用
+            function Student(props)
+            {
+                this.name = props.name || 'Unnamed';
+            }
+            Student.prototype.hello = function()
+            {
+                console.log('Hello, ' + this.name + '!');
+            }
+            function PrimaryStudent(props)
+            {
+                Student.call(this,props);
+                this.grade = props.grade || 1;
+            }
+            // 实现原型链继承
+            inherits(PrimaryStudent,Student);
+            // 绑定其他方法到PrimaryStudent原型
+            PrimaryStudent.prototype.getGrade = function()
+            {
+                return this.grade;
+            }
+
+            // 小结：
+            //     1、定义新的构造函数，并在内部用call()调用希望‘继承’的构造函数，并绑定this
+            //     2、借助中间函数F实现原型链继承，最好通过封装的inherits函数完成
+            //     3、继续在新的构造函数的原型上定义新方法
+        </script>
+    </body>
+</html>

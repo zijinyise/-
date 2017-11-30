@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>删除DOM</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <div id="list">
+            <p id="java">Java</p>
+            <p id="html">HTML</p>
+            <p id="css">CSS</p>
+        </div>
+        <script>
+            // 删除一个DOM节点就比插入要容易得多
+            // 要删除一个节点，首先要获得该节点本身以及它的父节点，然后，调用父节点的removeChild把自己删掉：
+            // 拿到要删除的节点
+            var self = document.getElementById('java');
+            // 拿到父节点
+            var parent = self.parentElement;
+            // 删除
+            var removed = parent.removeChild(self);
+            console.log(removed === self);  // true
+
+            // 注意到删除后的节点虽然不在文档树中了，但其实它还在内存中，可以随时再次被添加到别的位置
+            // 当你遍历一个父节点的子节点并进行删除操作时，要注意，
+            // children属性是一个只读属性，并且它在子节点变化时会实时更新
+            // 例如，对于上面的HTML结构：
+            // <div id="list">
+            //     <p id="java">Java</p>
+            //     <p id="html">HTML</p>
+            //     <p id="css">CSS</p>
+            // </div>
+            // 当用如下代码删除子节点时：
+            // var parent = document.getElementById('list');
+            // list.removeChild(list.children[0]);
+            // list.removeChild(list.children[1]);
+            // 浏览器报错：parent.children[1]不是一个有效的节点,原因就在于，当<p id="html">HTML</p>节点被删除后，
+            // parent.children的节点数量已经从2变为了1，索引[1]已经不存在了
+            // 因此，删除多个节点时，要注意children属性时刻都在变化
+        </script>
+
+
+        <!--练习：-->
+        <!-- HTML结构 -->
+        <ul id="test-list">
+            <li>JavaScript</li>
+            <li>Swift</li>
+            <li>HTML</li>
+            <li>ANSI C</li>
+            <li>CSS</li>
+            <li>DirectX</li>
+        </ul>
+        <!--把与web开发技术不相关的节点删除掉-->
+        <script>
+            // 一：
+            // var list = document.getElementById('test-list');
+            // var children = document.getElementById('test-list').children;
+            // for(var i = 0; i < children.length; i++)
+            // {
+            //     if(children[i].innerText == 'Swift' || children[i].innerText == 'ANSI C' || children[i].innerText == 'DirectX')
+            //     {
+            //         list.removeChild(list.children[i])
+            //     }
+            // }
+
+            // 二：
+            // var list = document.getElementById('test-list');
+            // var child = document.getElementsByTagName('li');
+            // for(var li of child)
+            // {
+            //     if(li.innerHTML == 'Swift' || li.innerHTML == 'ANSI C' || li.innerHTML == 'DirectX')
+            //     {
+            //         list.removeChild(li)
+            //     }
+            // }
+
+            // 三：
+            var arr = ['JavaScript','HTML','CSS'];
+            var list = document.querySelectorAll('#test-list li');
+            list.forEach(e => arr.includes(e.innerText) || e.remove());
+
+            // 测试：
+            (function ()
+            {
+                var arr, i,
+                    t = document.getElementById('test-list');
+                if(t && t.children && t.children.length === 3)
+                {
+                    arr = [];
+                    for(i = 0; i < t.children.length; i ++)
+                    {
+                        arr.push(t.children[i].innerText);
+                    }
+                    if(arr.toString() === ['JavaScript', 'HTML', 'CSS'].toString())
+                    {
+                        alert('测试通过!');
+                    }
+                    else
+                    {
+                        alert('测试失败: ' + arr.toString());
+                    }
+                }
+                else
+                {
+                    alert('测试失败!');
+                }
+            })();
+        </script>
+    </body>
+</html>
